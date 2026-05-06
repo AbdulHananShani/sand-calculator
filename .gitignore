@@ -34,3 +34,20 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# ── Custom additions ─────────────────────────────
+# OS files
+Thumbs.db
+desktop.ini
+
+# Editor folders
+.vscode/
+.idea/
+
+# Local data backups
+*.backup.json
+
+# Logs
+logs/
+*.log
