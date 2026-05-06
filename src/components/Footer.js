@@ -52,7 +52,7 @@ export default function Footer() {
               </div>
               <span className="text-lg font-bold">
                 <span className="text-gradient">Sand</span>
-                <span className="text-gray-100"> Calculators</span>
+                <span className="text-gray-100"> Calculator</span>
               </span>
             </Link>
 
