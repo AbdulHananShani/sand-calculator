@@ -1,10 +1,7 @@
 // ============================================================
 // FILE: src/app/calculators/[slug]/page.js
-// PURPOSE: Dynamic page that renders the correct calculator
-//          based on the URL slug. Handles all 10 calculators
-//          from a single file using the slug to match data.
-//          Also renders the SEO description below calculator.
-//          Includes JSON-LD schema for Google rich results.
+// PURPOSE: Dynamic calculator page — updated for Next.js 16
+//          params must be awaited (breaking change in Next.js 15+)
 // PLACEMENT: src/app/calculators/[slug]/page.js (REPLACE)
 // ============================================================
 
@@ -24,7 +21,9 @@ export async function generateStaticParams() {
 
 // ── Enhanced SEO metadata per calculator page ────────────────
 export async function generateMetadata({ params }) {
-  const calculator = calculators.find((c) => c.slug === params.slug);
+  // ── Await params — required in Next.js 15+ ──
+  const { slug } = await params;
+  const calculator = calculators.find((c) => c.slug === slug);
   if (!calculator) return {};
 
   const url = `${BASE_URL}/calculators/${calculator.slug}`;
@@ -32,16 +31,13 @@ export async function generateMetadata({ params }) {
   return {
     title: `${calculator.name} — Free Online Tool`,
     description: calculator.description.replace(/\s+/g, ' ').trim().slice(0, 160),
-    // ── Canonical URL for this calculator ──
     alternates: { canonical: url },
-    // ── Open Graph ──
     openGraph: {
       title: `${calculator.name} — Free Online Sand Calculator`,
       description: calculator.intro,
       url,
       type: 'website',
     },
-    // ── Twitter ──
     twitter: {
       card: 'summary',
       title: `${calculator.name} — Free Online Sand Calculator`,
@@ -51,16 +47,19 @@ export async function generateMetadata({ params }) {
 }
 
 // ── Calculator Page Component ────────────────────────────────
-export default function CalculatorPage({ params }) {
+// async function — required to await params in Next.js 15+
+export default async function CalculatorPage({ params }) {
+
+  // ── Await params — required in Next.js 15+ ──
+  const { slug } = await params;
 
   // Find the matching calculator by slug
-  const calculator = calculators.find((c) => c.slug === params.slug);
+  const calculator = calculators.find((c) => c.slug === slug);
 
   // Show 404 if slug doesn't match any calculator
   if (!calculator) notFound();
 
   // ── Calculator JSON-LD Schema ──────────────────────────────
-  // Tells Google this is a free web application/calculator tool
   const calculatorSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -74,7 +73,6 @@ export default function CalculatorPage({ params }) {
       price: '0',
       priceCurrency: 'USD',
     },
-    // ── Breadcrumb schema for Google ──
     breadcrumb: {
       '@type': 'BreadcrumbList',
       itemListElement: [
@@ -88,7 +86,7 @@ export default function CalculatorPage({ params }) {
   return (
     <div className="pt-20 pb-16">
 
-      {/* ── Calculator JSON-LD Schema injected into page head ── */}
+      {/* ── Calculator JSON-LD Schema ── */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(calculatorSchema) }}
@@ -142,11 +140,9 @@ export default function CalculatorPage({ params }) {
               <ol className="flex flex-col gap-3">
                 {calculator.inputs.map((input, i) => (
                   <li key={input.id} className="flex items-start gap-3">
-                    {/* Step number */}
                     <span className="w-6 h-6 rounded-full bg-primary-600/20 border border-primary-500/30 text-primary-400 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
                       {i + 1}
                     </span>
-                    {/* Step text */}
                     <div>
                       <p className="text-gray-300 text-sm font-medium">
                         Enter {input.label}

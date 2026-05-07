@@ -144,7 +144,7 @@ const organizationSchema = {
 // ── Root Layout Component ────────────────────────────────────
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} data-scroll-behavior="smooth">
       <head>
         {/* ── JSON-LD Structured Data ── */}
         <script

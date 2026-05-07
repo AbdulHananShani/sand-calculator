@@ -1,9 +1,8 @@
 // ============================================================
 // FILE: src/app/blog/[slug]/page.js
-// PURPOSE: Individual blog post page. Reads the specific post
-//          from blogs.json by slug and renders full content.
-//          Accessible at /blog/[slug]
-// PLACEMENT: src/app/blog/[slug]/page.js (New File)
+// PURPOSE: Individual blog post page — updated for Next.js 16
+//          params must be awaited (breaking change in Next.js 15+)
+// PLACEMENT: src/app/blog/[slug]/page.js (REPLACE)
 // ============================================================
 
 import { getBlogBySlug, getAllBlogs, formatDate } from '@/lib/blogUtils';
@@ -19,7 +18,9 @@ export async function generateStaticParams() {
 
 // ── Generate dynamic SEO metadata per blog post ──────────────
 export async function generateMetadata({ params }) {
-  const blog = getBlogBySlug(params.slug);
+  // ── Await params — required in Next.js 15+ ──
+  const { slug } = await params;
+  const blog = getBlogBySlug(slug);
   if (!blog) return {};
   return {
     title: blog.title,
@@ -28,10 +29,13 @@ export async function generateMetadata({ params }) {
 }
 
 // ── Blog Post Page Component ─────────────────────────────────
-export default function BlogPostPage({ params }) {
+export default async function BlogPostPage({ params }) {
+
+  // ── Await params — required in Next.js 15+ ──
+  const { slug } = await params;
 
   // Find the blog post by slug
-  const blog = getBlogBySlug(params.slug);
+  const blog = getBlogBySlug(slug);
 
   // Show 404 if slug doesn't match any post
   if (!blog) notFound();
@@ -104,22 +108,16 @@ export default function BlogPostPage({ params }) {
           <div className="lg:col-span-3">
             <div className="card-glass p-8 md:p-10">
 
-              {/* Excerpt / intro */}
+              {/* Excerpt */}
               <p className="text-lg text-gray-300 leading-relaxed border-l-4 border-primary-500 pl-4 mb-8 italic">
                 {blog.excerpt}
               </p>
 
-              {/* Full blog content */}
-              <div className="prose prose-invert prose-lg max-w-none
-                prose-headings:text-white prose-headings:font-bold
-                prose-p:text-gray-400 prose-p:leading-relaxed
-                prose-strong:text-white
-                prose-a:text-primary-400 prose-a:no-underline hover:prose-a:underline
-                prose-li:text-gray-400
-                prose-blockquote:border-primary-500 prose-blockquote:text-gray-300">
+              {/* Full content */}
+              <div className="flex flex-col gap-4">
                 {blog.content.split('\n').map((paragraph, i) => (
                   paragraph.trim() !== '' && (
-                    <p key={i} className="mb-4 text-gray-400 leading-relaxed">
+                    <p key={i} className="text-gray-400 leading-relaxed">
                       {paragraph}
                     </p>
                   )
@@ -128,7 +126,7 @@ export default function BlogPostPage({ params }) {
 
             </div>
 
-            {/* Back to blog button */}
+            {/* Back link */}
             <div className="mt-6">
               <Link
                 href="/blog"
@@ -145,12 +143,10 @@ export default function BlogPostPage({ params }) {
           <div className="lg:col-span-1">
             <div className="card-glass p-6 sticky top-24">
 
-              {/* Sidebar title */}
               <h3 className="text-white font-bold text-base mb-4 pb-3 border-b border-gray-700/50">
                 Post Details
               </h3>
 
-              {/* Details list */}
               <div className="flex flex-col gap-4">
 
                 <div className="flex flex-col gap-1">
@@ -178,10 +174,8 @@ export default function BlogPostPage({ params }) {
 
               </div>
 
-              {/* Divider */}
               <div className="border-t border-gray-700/50 my-4" />
 
-              {/* CTA to calculators */}
               <div className="flex flex-col gap-2">
                 <p className="text-gray-500 text-xs">
                   Need to calculate sand for your project?
