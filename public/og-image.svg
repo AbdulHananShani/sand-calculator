@@ -1,0 +1,54 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#020617"/>
+
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#14b8a6" stroke-width="0.3" opacity="0.3"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Gradient orb left -->
+  <ellipse cx="200" cy="300" rx="300" ry="300" fill="#0d9488" opacity="0.1"/>
+
+  <!-- Gradient orb right -->
+  <ellipse cx="1000" cy="400" rx="250" ry="250" fill="#f59e0b" opacity="0.08"/>
+
+  <!-- Logo icon background -->
+  <rect x="80" y="60" width="60" height="60" rx="16" fill="#0d9488"/>
+  <text x="110" y="100" font-family="Arial" font-size="32" fill="white" text-anchor="middle">⊞</text>
+
+  <!-- Logo text -->
+  <text x="150" y="98" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#2dd4bf">Sand</text>
+  <text x="220" y="98" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="white">Calculator</text>
+
+  <!-- Main headline -->
+  <text x="600" y="260" font-family="Arial, sans-serif" font-size="72" font-weight="900" fill="white" text-anchor="middle">Calculate Sand</text>
+
+  <!-- Gradient headline -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2dd4bf"/>
+      <stop offset="100%" style="stop-color:#fbbf24"/>
+    </linearGradient>
+  </defs>
+  <text x="600" y="355" font-family="Arial, sans-serif" font-size="72" font-weight="900" fill="url(#grad)" text-anchor="middle">Like a Pro</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="430" font-family="Arial, sans-serif" font-size="28" fill="#94a3b8" text-anchor="middle">10+ Free Professional Sand Calculators</text>
+
+  <!-- Bottom badges -->
+  <rect x="220" y="500" width="220" height="50" rx="25" fill="#0d9488" opacity="0.2" stroke="#0d9488" stroke-width="1"/>
+  <text x="330" y="532" font-family="Arial, sans-serif" font-size="18" fill="#2dd4bf" text-anchor="middle">Real Formulas</text>
+
+  <rect x="490" y="500" width="220" height="50" rx="25" fill="#0d9488" opacity="0.2" stroke="#0d9488" stroke-width="1"/>
+  <text x="600" y="532" font-family="Arial, sans-serif" font-size="18" fill="#2dd4bf" text-anchor="middle">Instant Results</text>
+
+  <rect x="760" y="500" width="220" height="50" rx="25" fill="#0d9488" opacity="0.2" stroke="#0d9488" stroke-width="1"/>
+  <text x="870" y="532" font-family="Arial, sans-serif" font-size="18" fill="#2dd4bf" text-anchor="middle">100% Free</text>
+
+  <!-- URL -->
+  <text x="600" y="600" font-family="Arial, sans-serif" font-size="22" fill="#475569" text-anchor="middle">sandcalculator.online</text>
+</svg>

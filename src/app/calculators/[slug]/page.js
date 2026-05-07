@@ -4,41 +4,95 @@
 //          based on the URL slug. Handles all 10 calculators
 //          from a single file using the slug to match data.
 //          Also renders the SEO description below calculator.
-// PLACEMENT: src/app/calculators/[slug]/page.js (New File)
+//          Includes JSON-LD schema for Google rich results.
+// PLACEMENT: src/app/calculators/[slug]/page.js (REPLACE)
 // ============================================================
 
 import { calculators } from '@/data/calculators';
 import { notFound } from 'next/navigation';
 import CalculatorEngine from '@/components/CalculatorEngine';
 
+// ── Base URL ─────────────────────────────────────────────────
+const BASE_URL = 'https://sandcalculator.online';
+
 // ── Generate static paths for all 10 calculators ────────────
-// This tells Next.js to pre-render all calculator pages at build time
 export async function generateStaticParams() {
   return calculators.map((calc) => ({
     slug: calc.slug,
   }));
 }
 
-// ── Generate dynamic SEO metadata per calculator ────────────
+// ── Enhanced SEO metadata per calculator page ────────────────
 export async function generateMetadata({ params }) {
   const calculator = calculators.find((c) => c.slug === params.slug);
   if (!calculator) return {};
+
+  const url = `${BASE_URL}/calculators/${calculator.slug}`;
+
   return {
     title: `${calculator.name} — Free Online Tool`,
-    description: calculator.description.slice(0, 160),
+    description: calculator.description.replace(/\s+/g, ' ').trim().slice(0, 160),
+    // ── Canonical URL for this calculator ──
+    alternates: { canonical: url },
+    // ── Open Graph ──
+    openGraph: {
+      title: `${calculator.name} — Free Online Sand Calculator`,
+      description: calculator.intro,
+      url,
+      type: 'website',
+    },
+    // ── Twitter ──
+    twitter: {
+      card: 'summary',
+      title: `${calculator.name} — Free Online Sand Calculator`,
+      description: calculator.intro,
+    },
   };
 }
 
 // ── Calculator Page Component ────────────────────────────────
 export default function CalculatorPage({ params }) {
+
   // Find the matching calculator by slug
   const calculator = calculators.find((c) => c.slug === params.slug);
 
   // Show 404 if slug doesn't match any calculator
   if (!calculator) notFound();
 
+  // ── Calculator JSON-LD Schema ──────────────────────────────
+  // Tells Google this is a free web application/calculator tool
+  const calculatorSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: calculator.name,
+    description: calculator.intro,
+    url: `${BASE_URL}/calculators/${calculator.slug}`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    // ── Breadcrumb schema for Google ──
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home',        item: BASE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Calculators', item: `${BASE_URL}/calculators` },
+        { '@type': 'ListItem', position: 3, name: calculator.name, item: `${BASE_URL}/calculators/${calculator.slug}` },
+      ],
+    },
+  };
+
   return (
     <div className="pt-20 pb-16">
+
+      {/* ── Calculator JSON-LD Schema injected into page head ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(calculatorSchema) }}
+      />
 
       {/* ── Page Header ──────────────────────────────────── */}
       <div className="bg-gradient-to-b from-dark-900 to-dark-950 border-b border-gray-800/50 py-12">
