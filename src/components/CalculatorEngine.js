@@ -275,8 +275,11 @@ export default function CalculatorEngine({ calculator }) {
           {calculator.inputs.map((input) => (
             <div key={input.id} className="flex flex-col gap-2">
 
-              {/* Input label with unit badge */}
-              <label className="flex items-center justify-between">
+              {/* Input label — htmlFor links label to input for accessibility */}
+              <label
+                htmlFor={`field-${input.id}`}
+                className="flex items-center justify-between cursor-pointer"
+              >
                 <span className="text-gray-300 text-sm font-medium">
                   {input.label}
                 </span>
@@ -285,15 +288,18 @@ export default function CalculatorEngine({ calculator }) {
                 </span>
               </label>
 
-              {/* Input field */}
+              {/* Input field — id and name added for accessibility and autofill */}
               <input
                 type="number"
+                id={`field-${input.id}`}
+                name={`field-${input.id}`}
                 min="0"
                 step="any"
                 value={inputs[input.id] || ''}
                 onChange={(e) => handleChange(input.id, e.target.value)}
                 placeholder={input.placeholder}
                 className="input-field"
+                autoComplete="off"
               />
 
             </div>
