@@ -1,10 +1,10 @@
 // ============================================================
 // FILE: src/app/api/blogs/route.js
-// PURPOSE: API route handlers for blog CRUD operations.
-//          GET  — returns all blogs
-//          POST — creates a new blog post
-//          DELETE — removes a blog post by id
-// PLACEMENT: src/app/api/blogs/route.js (New File)
+// PURPOSE: API routes for blog CRUD operations using Supabase.
+//          GET  — fetch all blogs
+//          POST — create new blog
+//          DELETE — remove blog by id
+// PLACEMENT: src/app/api/blogs/route.js (REPLACE)
 // ============================================================
 
 import { NextResponse } from 'next/server';
@@ -13,10 +13,13 @@ import { getAllBlogs, saveBlog, deleteBlog } from '@/lib/blogUtils';
 // ── GET: Return all blog posts ───────────────────────────────
 export async function GET() {
   try {
-    const blogs = getAllBlogs();
+    const blogs = await getAllBlogs();
     return NextResponse.json(blogs);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch blogs' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to fetch blogs' },
+      { status: 500 }
+    );
   }
 }
 
@@ -24,14 +27,21 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body   = await request.json();
-    const result = saveBlog(body);
+    const result = await saveBlog(body);
+
     if (result.success) {
       return NextResponse.json(result.blog, { status: 201 });
     } else {
-      return NextResponse.json({ error: result.error }, { status: 500 });
+      return NextResponse.json(
+        { error: result.error },
+        { status: 500 }
+      );
     }
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create blog' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to create blog' },
+      { status: 500 }
+    );
   }
 }
 
@@ -39,17 +49,29 @@ export async function POST(request) {
 export async function DELETE(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const id               = searchParams.get('id');
+    const id = searchParams.get('id');
+
     if (!id) {
-      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'ID is required' },
+        { status: 400 }
+      );
     }
-    const result = deleteBlog(id);
+
+    const result = await deleteBlog(id);
+
     if (result.success) {
       return NextResponse.json({ success: true });
     } else {
-      return NextResponse.json({ error: result.error }, { status: 500 });
+      return NextResponse.json(
+        { error: result.error },
+        { status: 500 }
+      );
     }
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to delete blog' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to delete blog' },
+      { status: 500 }
+    );
   }
 }
