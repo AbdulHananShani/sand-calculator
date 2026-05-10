@@ -124,3 +124,102 @@
 .blog-content a {
   @apply text-primary-400 hover:text-primary-300 underline transition-colors duration-200;
 }
+
+
+/* ── Tiptap Rich Text Editor Styles ─────────────────────── */
+
+.tiptap-editor {
+  @apply min-h-96 p-4 bg-dark-900 text-gray-100 outline-none;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* Placeholder */
+.tiptap-editor p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply text-gray-600 pointer-events-none float-left h-0;
+}
+
+/* Headings */
+.tiptap-editor h1 { @apply text-3xl font-black text-white mt-8 mb-4; }
+.tiptap-editor h2 { @apply text-2xl font-bold text-white mt-6 mb-3 pb-2 border-b border-gray-700; }
+.tiptap-editor h3 { @apply text-xl font-bold text-white mt-5 mb-2; }
+.tiptap-editor h4 { @apply text-lg font-bold text-primary-400 mt-4 mb-2; }
+.tiptap-editor h5 { @apply text-base font-bold text-gray-300 mt-3 mb-1; }
+.tiptap-editor h6 { @apply text-sm font-bold text-gray-400 mt-3 mb-1; }
+
+/* Paragraphs */
+.tiptap-editor p { @apply text-gray-300 leading-relaxed mb-3; }
+
+/* Bold and italic */
+.tiptap-editor strong { @apply text-white font-bold; }
+.tiptap-editor em     { @apply text-gray-200 italic; }
+.tiptap-editor u      { @apply underline; }
+.tiptap-editor s      { @apply line-through text-gray-500; }
+
+/* Lists */
+.tiptap-editor ul { @apply list-disc ml-6 mb-4 flex flex-col gap-1; }
+.tiptap-editor ol { @apply list-decimal ml-6 mb-4 flex flex-col gap-1; }
+.tiptap-editor li { @apply text-gray-300 leading-relaxed; }
+
+/* Blockquote */
+.tiptap-editor blockquote {
+  @apply border-l-4 border-primary-500 pl-4 text-gray-300 italic my-4
+         bg-primary-600/5 py-3 rounded-r-xl;
+}
+
+/* Horizontal rule */
+.tiptap-editor hr { @apply border-gray-700 my-6; }
+
+/* Images */
+.tiptap-editor img {
+  @apply max-w-full rounded-xl my-4 shadow-lg cursor-pointer;
+}
+.tiptap-editor img.ProseMirror-selectednode {
+  @apply ring-2 ring-primary-500;
+}
+
+/* Links */
+.tiptap-editor a {
+  @apply text-primary-400 underline cursor-pointer;
+}
+
+/* Code */
+.tiptap-editor code {
+  @apply bg-dark-800 text-primary-300 px-1.5 py-0.5 rounded text-sm font-mono;
+}
+.tiptap-editor pre {
+  @apply bg-dark-800 rounded-xl p-4 my-4 overflow-x-auto;
+}
+.tiptap-editor pre code {
+  @apply bg-transparent p-0;
+}
+
+/* Text alignment */
+.tiptap-editor [style*="text-align: center"] { text-align: center; }
+.tiptap-editor [style*="text-align: right"]  { text-align: right; }
+.tiptap-editor [style*="text-align: left"]   { text-align: left; }
+
+/* Focus outline */
+.tiptap-editor:focus { outline: none; }
+
+/* ── Blog post rendered content styles ───────────────────── */
+.blog-content h1 { @apply text-3xl font-black text-white mt-10 mb-4; }
+.blog-content h2 { @apply text-2xl font-bold text-white mt-8 mb-3 pb-2 border-b border-gray-700/50; }
+.blog-content h3 { @apply text-xl font-bold text-white mt-6 mb-2; }
+.blog-content h4 { @apply text-lg font-bold text-primary-400 mt-4 mb-2; }
+.blog-content p  { @apply text-gray-400 leading-relaxed mb-4; }
+.blog-content strong { @apply text-white font-bold; }
+.blog-content em     { @apply text-gray-300 italic; }
+.blog-content ul  { @apply mb-4 flex flex-col gap-1; }
+.blog-content li  { @apply text-gray-400 ml-6 list-disc leading-relaxed; }
+.blog-content ol li { @apply list-decimal; }
+.blog-content blockquote {
+  @apply border-l-4 border-primary-500 pl-4 text-gray-300 italic my-6
+         bg-primary-600/5 py-3 rounded-r-xl;
+}
+.blog-content hr  { @apply border-gray-700 my-8; }
+.blog-content img { @apply w-full rounded-xl my-6 max-w-2xl shadow-lg; }
+.blog-content a   { @apply text-primary-400 hover:text-primary-300 underline transition-colors; }
+.blog-content pre { @apply bg-dark-800 rounded-xl p-4 my-4 overflow-x-auto; }
+.blog-content code { @apply bg-dark-800 text-primary-300 px-1.5 py-0.5 rounded text-sm font-mono; }

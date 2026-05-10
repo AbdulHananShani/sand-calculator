@@ -1,15 +1,17 @@
 // ============================================================
 // FILE: src/app/blog/[slug]/page.js
-// PURPOSE: Individual blog post page with full Markdown
-//          rendering. Fetches from Supabase database.
-//          Updated for Next.js 16 async params.
+// PURPOSE: Blog post page with:
+//          - Full HTML content rendering (from Tiptap)
+//          - Auto-generated Table of Contents from headings
+//          - TOC sticky sidebar on left
+//          - Post details sidebar on right
 // PLACEMENT: src/app/blog/[slug]/page.js (REPLACE)
 // ============================================================
 
 import { getBlogBySlug, getAllBlogs, formatDate } from '@/lib/blogUtils';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Clock, User, Calendar, Tag } from 'lucide-react';
+import { ArrowLeft, Clock, User, Calendar, Tag, List } from 'lucide-react';
 
 // ── Generate static paths ────────────────────────────────────
 export async function generateStaticParams() {
@@ -33,40 +35,34 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// ── Markdown to HTML renderer ────────────────────────────────
-// Converts markdown syntax to styled HTML for display
-function renderMarkdown(text) {
-  if (!text) return '';
-  return text
-    // Headings
-    .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
-    .replace(/^### (.+)$/gm,  '<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,   '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm,    '<h1>$1</h1>')
-    // Bold and italic
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g,     '<em>$1</em>')
-    // Blockquote
-    .replace(/^> (.+)$/gm,    '<blockquote>$1</blockquote>')
-    // Bullet lists
-    .replace(/^- (.+)$/gm,    '<li>$1</li>')
-    // Numbered lists
-    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
-    // Horizontal rule
-    .replace(/^---$/gm,        '<hr/>')
-    // Images — MUST come before links
-    .replace(/!\[(.+?)\]\((.+?)\)/g, '<img src="$2" alt="$1"/>')
-    // Links
-    .replace(/\[(.+?)\]\((.+?)\)/g,  '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-    // Paragraphs — wrap lines that aren't already HTML tags
-    .split('\n')
-    .map((line) => {
-      const trimmed = line.trim();
-      if (trimmed === '') return '';
-      if (trimmed.startsWith('<')) return trimmed;
-      return `<p>${trimmed}</p>`;
-    })
-    .join('\n');
+// ── Extract headings from HTML for Table of Contents ─────────
+function extractHeadings(html) {
+  if (!html) return [];
+  const headings = [];
+  const regex = /<h([1-3])[^>]*>(.*?)<\/h[1-3]>/gi;
+  let match;
+  let index = 0;
+
+  while ((match = regex.exec(html)) !== null) {
+    const level = parseInt(match[1]);
+    // Strip any HTML tags from heading text
+    const text  = match[2].replace(/<[^>]+>/g, '').trim();
+    const id    = `heading-${index}`;
+    headings.push({ level, text, id });
+    index++;
+  }
+  return headings;
+}
+
+// ── Add IDs to headings in HTML for anchor links ─────────────
+function addHeadingIds(html) {
+  if (!html) return '';
+  let index = 0;
+  return html.replace(/<h([1-3])([^>]*)>(.*?)<\/h[1-3]>/gi, (match, level, attrs, content) => {
+    const id = `heading-${index}`;
+    index++;
+    return `<h${level}${attrs} id="${id}">${content}</h${level}>`;
+  });
 }
 
 // ── Blog Post Page Component ─────────────────────────────────
@@ -76,7 +72,10 @@ export default async function BlogPostPage({ params }) {
   const blog = await getBlogBySlug(slug);
   if (!blog) notFound();
 
-  const htmlContent = renderMarkdown(blog.content);
+  // Extract headings for TOC and add IDs to content
+  const headings    = extractHeadings(blog.content);
+  const htmlContent = addHeadingIds(blog.content);
+  const hasToc      = headings.length >= 3;
 
   return (
     <div className="pt-20 pb-16">
@@ -87,30 +86,26 @@ export default async function BlogPostPage({ params }) {
 
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-            <Link href="/" className="hover:text-primary-400 transition-colors">
-              Home
-            </Link>
+            <Link href="/" className="hover:text-primary-400 transition-colors">Home</Link>
             <span>/</span>
-            <Link href="/blog" className="hover:text-primary-400 transition-colors">
-              Blog
-            </Link>
+            <Link href="/blog" className="hover:text-primary-400 transition-colors">Blog</Link>
             <span>/</span>
             <span className="text-gray-300 truncate max-w-xs">{blog.title}</span>
           </div>
 
-          {/* Category badge */}
+          {/* Category */}
           <div className="mb-4">
             <span className="inline-block bg-accent-500/10 text-accent-400 text-xs font-medium px-3 py-1 rounded-full border border-accent-500/20">
               {blog.category}
             </span>
           </div>
 
-          {/* Post title */}
+          {/* Title */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-6 max-w-4xl leading-tight">
             {blog.title}
           </h1>
 
-          {/* Post meta */}
+          {/* Meta */}
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-primary-600/20 border border-primary-500/30 flex items-center justify-center">
@@ -133,10 +128,49 @@ export default async function BlogPostPage({ params }) {
 
       {/* ── Blog Content ─────────────────────────────────── */}
       <div className="section-wrapper mt-10">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
+        <div className={`grid gap-8 ${hasToc ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1 lg:grid-cols-4'}`}>
 
-          {/* ── Main Content ───────────────────────────────── */}
-          <div className="lg:col-span-3">
+          {/* ── LEFT: Table of Contents ────────────────────── */}
+          {hasToc && (
+            <div className="lg:col-span-3 order-2 lg:order-1">
+              <div
+                className="card-glass p-5 sticky top-24 overflow-y-auto"
+                style={{ maxHeight: 'calc(100vh - 8rem)' }}
+              >
+
+                {/* TOC header */}
+                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-700/50">
+                  <List className="w-4 h-4 text-primary-400" />
+                  <h3 className="text-white font-bold text-sm">
+                    Table of Contents
+                  </h3>
+                </div>
+
+                {/* TOC links */}
+                <nav className="flex flex-col gap-1">
+                  {headings.map((heading, i) => (
+                    <a
+                      key={i}
+                      href={`#${heading.id}`}
+                      className={`text-xs leading-relaxed transition-colors duration-200 hover:text-primary-400 py-0.5 ${
+                        heading.level === 1
+                          ? 'text-gray-300 font-semibold'
+                          : heading.level === 2
+                          ? 'text-gray-400 pl-2 border-l border-gray-700/50'
+                          : 'text-gray-500 pl-4 border-l border-gray-700/30'
+                      }`}
+                    >
+                      {heading.text}
+                    </a>
+                  ))}
+                </nav>
+
+              </div>
+            </div>
+          )}
+
+          {/* ── MIDDLE: Main Content ───────────────────────── */}
+          <div className={`order-1 lg:order-2 ${hasToc ? 'lg:col-span-6' : 'lg:col-span-3'}`}>
             <div className="card-glass p-8 md:p-10">
 
               {/* Excerpt */}
@@ -144,7 +178,7 @@ export default async function BlogPostPage({ params }) {
                 {blog.excerpt}
               </p>
 
-              {/* ── Rendered Markdown Content ── */}
+              {/* ── Rendered HTML Content from Tiptap ── */}
               <div
                 className="blog-content"
                 dangerouslySetInnerHTML={{ __html: htmlContent }}
@@ -164,12 +198,14 @@ export default async function BlogPostPage({ params }) {
             </div>
           </div>
 
-          {/* ── Sidebar ────────────────────────────────────── */}
-          <div className="lg:col-span-1">
+          {/* ── RIGHT: Post Details Sidebar ───────────────── */}
+          <div className={`order-3 ${hasToc ? 'lg:col-span-3' : 'lg:col-span-1'}`}>
             <div className="card-glass p-6 sticky top-24">
+
               <h3 className="text-white font-bold text-base mb-4 pb-3 border-b border-gray-700/50">
                 Post Details
               </h3>
+
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-gray-500 text-xs uppercase tracking-wider">Author</span>
@@ -191,18 +227,22 @@ export default async function BlogPostPage({ params }) {
                   </span>
                 </div>
               </div>
+
               <div className="border-t border-gray-700/50 my-4" />
+
               <div className="flex flex-col gap-2">
                 <p className="text-gray-500 text-xs">Need to calculate sand?</p>
                 <Link href="/calculators" className="btn-primary text-sm text-center py-2">
                   Use Our Calculators
                 </Link>
               </div>
+
             </div>
           </div>
 
         </div>
       </div>
+
     </div>
   );
 }
