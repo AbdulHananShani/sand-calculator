@@ -191,20 +191,23 @@ export default function AdminPage() {
             <p className="text-gray-500 text-sm text-center mb-8">
               Enter your admin password to manage blog posts
             </p>
-            <div className="flex flex-col gap-3">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleLogin(); }}
+              className="flex flex-col gap-3"
+            >
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
                 placeholder="Enter admin password"
                 className="input-field"
+                autoComplete="current-password"
               />
               {authError && <p className="text-red-400 text-sm">{authError}</p>}
-              <button onClick={handleLogin} className="btn-primary w-full">
+              <button type="submit" className="btn-primary w-full">
                 Login to Admin Panel
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

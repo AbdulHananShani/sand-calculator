@@ -223,3 +223,122 @@
 .blog-content a   { @apply text-primary-400 hover:text-primary-300 underline transition-colors; }
 .blog-content pre { @apply bg-dark-800 rounded-xl p-4 my-4 overflow-x-auto; }
 .blog-content code { @apply bg-dark-800 text-primary-300 px-1.5 py-0.5 rounded text-sm font-mono; }
+
+
+/* ── Table styles — Editor ───────────────────────────── */
+
+/* Table wrapper */
+.tiptap-editor .tableWrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  border: 1px solid #374151;
+}
+
+/* Table itself */
+.tiptap-editor table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 400px;
+  table-layout: fixed;
+}
+
+/* Header cells */
+.tiptap-editor table th {
+  background-color: rgba(13, 148, 136, 0.2);
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #4b5563;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Regular cells */
+.tiptap-editor table td {
+  background-color: #1e293b;
+  color: #d1d5db;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #374151;
+  vertical-align: top;
+  min-width: 80px;
+}
+
+/* Hover row highlight */
+.tiptap-editor table tr:hover td {
+  background-color: #263548;
+}
+
+/* Even row subtle distinction */
+.tiptap-editor table tr:nth-child(even) td {
+  background-color: #1a2535;
+}
+
+/* Selected cell highlight */
+.tiptap-editor .selectedCell {
+  background-color: rgba(13, 148, 136, 0.15) !important;
+  border: 1px solid rgba(13, 148, 136, 0.5) !important;
+}
+
+/* Column resize handle */
+.tiptap-editor .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #14b8a6;
+  cursor: col-resize;
+  z-index: 10;
+}
+
+/* Resize cursor on table */
+.tiptap-editor.resize-cursor {
+  cursor: col-resize;
+}
+
+/* ── Table styles — Blog post display ───────────────── */
+
+.blog-content .tableWrapper,
+.blog-content table {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.blog-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 2rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid #374151;
+  table-layout: auto;
+}
+
+.blog-content table th {
+  background-color: rgba(13, 148, 136, 0.2);
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #4b5563;
+  text-align: left;
+}
+
+.blog-content table td {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #374151;
+  vertical-align: top;
+}
+
+.blog-content table tr:nth-child(even) td {
+  background-color: rgba(30, 41, 59, 0.5);
+}
+
+.blog-content table tr:hover td {
+  background-color: rgba(38, 53, 72, 0.5);
+}
