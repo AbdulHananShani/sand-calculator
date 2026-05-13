@@ -170,7 +170,7 @@ export default async function BlogPostPage({ params }) {
           )}
 
           {/* ── MIDDLE: Main Content ───────────────────────── */}
-          <div className={`order-1 lg:order-2 ${hasToc ? 'lg:col-span-6' : 'lg:col-span-3'}`}>
+          <div className={`order-1 lg:order-2 ${hasToc ? 'lg:col-span-9' : 'lg:col-span-4'}`}>
             <div className="card-glass p-8 md:p-10">
 
               {/* Excerpt */}
