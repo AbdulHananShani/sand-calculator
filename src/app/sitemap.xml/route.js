@@ -9,7 +9,7 @@ import { calculators } from '@/data/calculators';
 import { getAllBlogs } from '@/lib/blogUtils';
 
 export async function GET() {
-  const baseUrl = 'https://sandcalculator.online';
+  const baseUrl = 'https://www.sandcalculator.online';
   const today   = new Date().toISOString().split('T')[0];
 
   // ── Static pages ─────────────────────────────────────────

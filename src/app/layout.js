@@ -21,7 +21,7 @@ const inter = Inter({
 });
 
 // ── Site base URL ────────────────────────────────────────────
-const BASE_URL = 'https://sandcalculator.online';
+const BASE_URL = 'https://www.sandcalculator.online';
 
 // ── Site-wide SEO Metadata ───────────────────────────────────
 export const metadata = {
@@ -53,7 +53,7 @@ export const metadata = {
 
   // ── Canonical ──────────────────────────────────────────────
   alternates: {
-    canonical: BASE_URL,
+    canonical: 'https://www.sandcalculator.online',
   },
 
   // ── Authors ────────────────────────────────────────────────

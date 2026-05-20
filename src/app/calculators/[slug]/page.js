@@ -10,7 +10,7 @@ import { notFound } from 'next/navigation';
 import CalculatorEngine from '@/components/CalculatorEngine';
 
 // ── Base URL ─────────────────────────────────────────────────
-const BASE_URL = 'https://sandcalculator.online';
+const BASE_URL = 'https://www.sandcalculator.online';
 
 // ── Generate static paths for all 10 calculators ────────────
 export async function generateStaticParams() {
