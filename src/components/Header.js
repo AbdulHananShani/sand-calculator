@@ -11,7 +11,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Calculator } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 // ── Navigation Links Data ────────────────────────────────────
 const navLinks = [
@@ -59,11 +59,14 @@ export default function Header() {
             href="/"
             className="flex items-center gap-2 group"
           >
-            {/* Logo icon with gradient background */}
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-900/40 group-hover:shadow-primary-700/50 transition-all duration-200">
-              <Calculator className="w-5 h-5 text-white" />
-            </div>
+            {/* Logo image */}
+            <img
+              src="/logo.png"
+              alt="Sand Calculator Logo"
+              className="w-10 h-10 opacity-100 rounded-xl object-cover group-hover:scale-105 transition-transform duration-200 shadow-lg shadow-primary-900/40"
+            />
 
+            {/* Logo text */}
             {/* Logo text */}
             <span className="text-lg font-bold">
               <span className="text-gradient">Sand</span>

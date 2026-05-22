@@ -7,7 +7,7 @@
 // ============================================================
 
 import Link from 'next/link';
-import { Calculator, Mail, Globe } from 'lucide-react';
+import { Mail, Globe } from 'lucide-react';
 
 // ── Footer Calculator Links ──────────────────────────────────
 const calculatorLinks = [
@@ -45,11 +45,13 @@ export default function Footer() {
           {/* ── Column 1: Brand & Description ───────────── */}
           <div className="lg:col-span-1">
 
-            {/* Logo */}
+             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group mb-4">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-900/40">
-                <Calculator className="w-5 h-5 text-white" />
-              </div>
+              <img
+                src="/logo.png"
+                alt="Sand Calculator Logo"
+                className="w-10 h-10 rounded-xl object-cover shadow-lg shadow-primary-900/40"
+              />
               <span className="text-lg font-bold">
                 <span className="text-gradient">Sand</span>
                 <span className="text-gray-100"> Calculator</span>

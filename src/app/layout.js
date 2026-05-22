@@ -160,11 +160,11 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        {/* ── Favicon tags ── */}
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/favicon.svg" sizes="32x32" />
-        <link rel="shortcut icon" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/favicon.svg" />
+        {/* ── Favicon tags — using brand logo ── */}
+        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="icon" href="/logo.png" sizes="32x32" />
+        <link rel="shortcut icon" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
 
         {/* ── Theme color for mobile browsers ── */}
         <meta name="theme-color" content="#0d9488" />
