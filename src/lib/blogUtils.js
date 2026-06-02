@@ -75,8 +75,8 @@ export async function saveBlog(blogData) {
         author:    blogData.author   || 'Admin',
         category:  blogData.category || 'General',
         read_time: readTime,
-      }])
-      .select()
+        faqs:      blogData.faqs     || [],
+      }])      .select()
       .single();
 
     if (error) throw error;

@@ -55,6 +55,7 @@ export async function PUT(request) {
         author:     body.author,
         category:   body.category,
         read_time:  readTime,
+        faqs:       body.faqs || [],
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)

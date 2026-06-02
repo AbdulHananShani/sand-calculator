@@ -40,6 +40,7 @@ const emptyForm = {
   content:  '',
   author:   'Admin',
   category: 'General',
+  faqs:     [],
 };
 
 // ── Admin Panel Component ────────────────────────────────────
@@ -395,6 +396,106 @@ export default function AdminPage() {
                     onChange={(html) => setForm({ ...form, content: html })}
                     placeholder="Start writing or paste from Google Docs / Word..."
                   />
+                </div>
+
+                {/* ── FAQ Section ────────────────────────── */}
+                <div className="flex flex-col gap-4">
+
+                  {/* FAQ header */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className="text-gray-300 text-sm font-medium">
+                        FAQs
+                      </label>
+                      <p className="text-gray-600 text-xs mt-0.5">
+                        Shown below the post. Boosts SEO with Google FAQ rich results.
+                      </p>
+                    </div>
+                    {/* Add FAQ button */}
+                    <button
+                      type="button"
+                      onClick={() => setForm({
+                        ...form,
+                        faqs: [...(form.faqs || []), { question: '', answer: '' }]
+                      })}
+                      className="flex items-center gap-2 px-3 py-2 text-xs text-primary-400 bg-primary-600/10 border border-primary-500/20 hover:bg-primary-600/20 rounded-lg transition-all"
+                    >
+                      <Plus className="w-3 h-3" />
+                      Add FAQ
+                    </button>
+                  </div>
+
+                  {/* FAQ list */}
+                  {(form.faqs || []).length === 0 && (
+                    <div className="text-center py-6 border border-dashed border-gray-700 rounded-xl">
+                      <p className="text-gray-600 text-sm">
+                        No FAQs yet. Click "Add FAQ" to add your first question.
+                      </p>
+                    </div>
+                  )}
+
+                  {(form.faqs || []).map((faq, index) => (
+                    <div
+                      key={index}
+                      className="card-glass p-4 flex flex-col gap-3"
+                    >
+                      {/* FAQ header row */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-primary-400 text-xs font-bold uppercase tracking-wider">
+                          FAQ {index + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = form.faqs.filter((_, i) => i !== index);
+                            setForm({ ...form, faqs: updated });
+                          }}
+                          className="text-red-400 hover:text-red-300 transition-colors"
+                          title="Remove this FAQ"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Question input */}
+                      <div className="flex flex-col gap-1">
+                        <label className="text-gray-400 text-xs">
+                          Question <span className="text-red-400">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={faq.question}
+                          onChange={(e) => {
+                            const updated = [...form.faqs];
+                            updated[index] = { ...updated[index], question: e.target.value };
+                            setForm({ ...form, faqs: updated });
+                          }}
+                          placeholder="e.g. How much sand do I need for a patio?"
+                          className="input-field text-sm"
+                        />
+                      </div>
+
+                      {/* Answer input */}
+                      <div className="flex flex-col gap-1">
+                        <label className="text-gray-400 text-xs">
+                          Answer <span className="text-red-400">*</span>
+                        </label>
+                        <textarea
+                          value={faq.answer}
+                          onChange={(e) => {
+                            const updated = [...form.faqs];
+                            updated[index] = { ...updated[index], answer: e.target.value };
+                            setForm({ ...form, faqs: updated });
+                          }}
+                          placeholder="Write a clear, helpful answer..."
+                          rows={3}
+                          className="input-field text-sm resize-none"
+                        />
+                      </div>
+
+                    </div>
+                  ))}
+
                 </div>
 
                 {/* Action buttons */}

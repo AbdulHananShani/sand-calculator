@@ -12,6 +12,8 @@ import { getBlogBySlug, getAllBlogs, formatDate } from '@/lib/blogUtils';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Clock, User, Calendar, Tag, List } from 'lucide-react';
+import FaqSection from '@/components/FaqSection';
+
 
 // ── Generate static paths ────────────────────────────────────
 export async function generateStaticParams() {
@@ -185,6 +187,13 @@ export default async function BlogPostPage({ params }) {
               />
 
             </div>
+
+            
+            {/* ── FAQ Section ── */}
+            <FaqSection
+              faqs={blog.faqs || []}
+              postTitle={blog.title}
+            />
 
             {/* Back link */}
             <div className="mt-6">

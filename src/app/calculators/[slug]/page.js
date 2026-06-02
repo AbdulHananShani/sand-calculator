@@ -1,7 +1,7 @@
 // ============================================================
 // FILE: src/app/calculators/[slug]/page.js
-// PURPOSE: Dynamic calculator page — updated for Next.js 16
-//          params must be awaited (breaking change in Next.js 15+)
+// PURPOSE: Dynamic calculator page - updated for Next.js 16
+//          params must be awaited. Includes JSON-LD schema.
 // PLACEMENT: src/app/calculators/[slug]/page.js (REPLACE)
 // ============================================================
 
@@ -9,19 +9,18 @@ import { calculators } from '@/data/calculators';
 import { notFound } from 'next/navigation';
 import CalculatorEngine from '@/components/CalculatorEngine';
 
-// ── Base URL ─────────────────────────────────────────────────
+// Base URL
 const BASE_URL = 'https://www.sandcalculator.online';
 
-// ── Generate static paths for all 10 calculators ────────────
+// Generate static paths for all 10 calculators
 export async function generateStaticParams() {
   return calculators.map((calc) => ({
     slug: calc.slug,
   }));
 }
 
-// ── Enhanced SEO metadata per calculator page ────────────────
+// SEO metadata per calculator page
 export async function generateMetadata({ params }) {
-  // ── Await params — required in Next.js 15+ ──
   const { slug } = await params;
   const calculator = calculators.find((c) => c.slug === slug);
   if (!calculator) return {};
@@ -29,37 +28,31 @@ export async function generateMetadata({ params }) {
   const url = `${BASE_URL}/calculators/${calculator.slug}`;
 
   return {
-    title: `${calculator.name} — Free Online Tool`,
+    title: `${calculator.name} -- Free Online Tool`,
     description: calculator.description.replace(/\s+/g, ' ').trim().slice(0, 160),
     alternates: { canonical: url },
     openGraph: {
-      title: `${calculator.name} — Free Online Sand Calculator`,
+      title: `${calculator.name} -- Free Online Sand Calculator`,
       description: calculator.intro,
       url,
       type: 'website',
     },
     twitter: {
       card: 'summary',
-      title: `${calculator.name} — Free Online Sand Calculator`,
+      title: `${calculator.name} -- Free Online Sand Calculator`,
       description: calculator.intro,
     },
   };
 }
 
-// ── Calculator Page Component ────────────────────────────────
-// async function — required to await params in Next.js 15+
+// Calculator Page Component
 export default async function CalculatorPage({ params }) {
 
-  // ── Await params — required in Next.js 15+ ──
   const { slug } = await params;
-
-  // Find the matching calculator by slug
   const calculator = calculators.find((c) => c.slug === slug);
-
-  // Show 404 if slug doesn't match any calculator
   if (!calculator) notFound();
 
-  // ── Calculator JSON-LD Schema ──────────────────────────────
+  // Calculator JSON-LD Schema
   const calculatorSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -86,13 +79,13 @@ export default async function CalculatorPage({ params }) {
   return (
     <div className="pt-20 pb-16">
 
-      {/* ── Calculator JSON-LD Schema ── */}
+      {/* Calculator JSON-LD Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(calculatorSchema) }}
       />
 
-      {/* ── Page Header ──────────────────────────────────── */}
+      {/* Page Header */}
       <div className="bg-gradient-to-b from-dark-900 to-dark-950 border-b border-gray-800/50 py-12">
         <div className="section-wrapper">
 
@@ -118,16 +111,16 @@ export default async function CalculatorPage({ params }) {
         </div>
       </div>
 
-      {/* ── Main Content ─────────────────────────────────── */}
+      {/* Main Content */}
       <div className="section-wrapper mt-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-          {/* ── Left Column: Calculator Engine ───────────── */}
+          {/* Left Column: Calculator Engine */}
           <div className="lg:col-span-2">
             <CalculatorEngine calculator={calculator} />
           </div>
 
-          {/* ── Right Column: Info Sidebar ────────────────── */}
+          {/* Right Column: Info Sidebar */}
           <div className="lg:col-span-1">
             <div className="card-glass p-6 sticky top-24">
 
@@ -136,7 +129,7 @@ export default async function CalculatorPage({ params }) {
                 How to Use
               </h3>
 
-              {/* Step by step instructions */}
+              {/* Steps */}
               <ol className="flex flex-col gap-3">
                 {calculator.inputs.map((input, i) => (
                   <li key={input.id} className="flex items-start gap-3">
@@ -183,7 +176,7 @@ export default async function CalculatorPage({ params }) {
 
         </div>
 
-        {/* ── SEO Description Section ───────────────────── */}
+        {/* SEO Description Section */}
         <div className="mt-12 card-glass p-8">
           <h2 className="text-2xl font-bold text-white mb-4">
             About the {calculator.name}
